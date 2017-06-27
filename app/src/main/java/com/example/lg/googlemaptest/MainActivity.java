@@ -10,11 +10,15 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.GroundOverlayOptions;
 import com.google.android.gms.maps.model.LatLng;
 
 public class MainActivity extends AppCompatActivity implements OnMapReadyCallback{
     GoogleMap googleMap;
     SupportMapFragment mapFragment;
+    GroundOverlayOptions loc_mark;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,7 +29,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
     @Override
-    public void onMapReady(GoogleMap googleMap) {
+    public void onMapReady(final GoogleMap googleMap) {
         this.googleMap=googleMap;
         googleMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
         googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(35.839269,128.631892),17));
@@ -33,7 +37,9 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         googleMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
             @Override
             public void onMapClick(LatLng latLng) {
-
+                loc_mark=new GroundOverlayOptions();
+                loc_mark.image(BitmapDescriptorFactory.fromResource(R.drawable.loc)).position(latLng,100f,100f);
+                googleMap.addGroundOverlay(loc_mark);
             }
         });
     }
@@ -42,6 +48,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     public static final int ITEM_NOMRMAL=2;
     public static final int ITEM_BUDAPEST=3;
     public static final int ITEM_OKTAGON=4;
+    public static final int ITEM_MARK_CLEAR=5;
     @Override
     public boolean onCreateOptionsMenu(Menu menu){
         super.onCreateOptionsMenu(menu);
@@ -50,6 +57,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         SubMenu hotmenu=menu.addSubMenu("핫플");
         hotmenu.add(0,3,0,"부다페스트");
         hotmenu.add(0,4,0,"옥타곤");
+        menu.add(0,ITEM_MARK_CLEAR,0,"위치 아이콘 제거");
 //        menu.add(0,3,0,"부다페스트");
         return true;
     }
@@ -66,6 +74,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 return true;
             case ITEM_OKTAGON: googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(37.511566, 127.031622),17)); //17은 줌 level
                 return true;
+            case ITEM_MARK_CLEAR: googleMap.clear(); return  true;
         }
         return false;
     }
