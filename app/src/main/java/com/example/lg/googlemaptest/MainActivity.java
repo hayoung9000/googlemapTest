@@ -30,6 +30,12 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         googleMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
         googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(35.839269,128.631892),17));
         googleMap.getUiSettings().setZoomControlsEnabled(true);
+        googleMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+            @Override
+            public void onMapClick(LatLng latLng) {
+
+            }
+        });
     }
 
     public static final int ITEM_SATELLITE=1;
